@@ -1,0 +1,86 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test 1
+      id: test-1
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Test 1
+        setup-command: pip install -r requirements.txt
+        command: python main.py
+        input: |-
+          3
+          Your care set up, do not pluck my care down.
+          My care is loss of care with old care done.
+          Your care is gain of care when new care is won.
+          2
+          care
+          is
+        expected-output: |-
+          [1, 2, 0]
+          [2, 1]
+        comparison-method: contains
+        timeout: 10
+        max-score: 1
+    - name: Test 2
+      id: test-2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Test 2
+        setup-command: pip install -r requirements.txt
+        command: python main.py
+        input: |-
+          4
+          Your care set up, do not pluck my care down.
+          My care is loss of care with old care done.
+          Your care is gain of care when new care is won.
+          Care, care, is gain of care, when new care is won.
+          3
+          care
+          won
+          is
+        expected-output: |-
+          [3, 1, 2, 0]
+          [2, 3]
+          [2, 3, 1]
+        comparison-method: contains
+        timeout: 10
+        max-score: 1
+    - name: Test 3
+      id: test-3
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Test 3
+        setup-command: pip install -r requirements.txt
+        command: python main.py
+        input: |-
+          3
+          Your care set up, do not pluck my care down.
+          My care is loss of care with old care done.
+          Your care is gain of care when new care is won.
+          1
+          care
+        expected-output: "[1, 2, 0]"
+        comparison-method: contains
+        timeout: 10
+        max-score: 1
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-1_RESULTS: "${{steps.test-1.outputs.result}}"
+        TEST-2_RESULTS: "${{steps.test-2.outputs.result}}"
+        TEST-3_RESULTS: "${{steps.test-3.outputs.result}}"
+      with:
+        runners: test-1,test-2,test-3
