@@ -2,37 +2,37 @@
 replacements = (',', '-', '!', '?', '.')
 
 # liczba dokumentów
-n = int(input("Podaj liczbę dokumentów:"))
+n = int(input())
 
 # dokumenty
 documents = []
 for _ in range(n):
-    my_str = input("->").lower()  # Zamiana na małe litery
+    my_str = input().lower()  # Zamiana na małe litery
     for r in replacements:
         my_str = my_str.replace(r, ' ')  # Zamiana znaków na spacje
     words = my_str.split()  # Podział na słowa
     documents.append(words)
 
 # liczba zapytań
-m = int(input("Liczba zapytań:"))
+m = int(input())
 
 # zapytania
 queries = []
 for _ in range(m):
-    query = input("->").strip().lower()
-    for r in replacements:
-        query = query.replace(r, ' ')  # Zamiana znaków na spacje
+    query = input().strip().lower()
     queries.append(query)
 
 # przetwarzanie zapytań
 for query in queries:
     results = []
 
+    # przetwarzanie każdego dokumentu
     for i, document in enumerate(documents):
         count = document.count(query)
         if count > 0:
-            results.append((i, count))
+            results.append((i, count))  
 
+    # sortowanie: według liczby wystąpień (malejąco), a potem według indeksu dokumentu (rosnąco)
     results.sort(key=lambda x: (-x[1], x[0]))
 
     # wyświetlanie indeksów dokumentów
