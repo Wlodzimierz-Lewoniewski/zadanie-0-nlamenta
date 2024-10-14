@@ -1,22 +1,28 @@
-install_requirements
-from collections import defaultdict
-import re
-
 # zamiana na małe litery i usunięcie niealfanumerycznych znaków
-def clean_text(text):
-    return re.sub(r'[^a-zA-Z0-9\s]', ' ', text).lower()
+replacements = (',', '-', '!', '?', '.')
 
 # liczba dokumentów
 n = int(input("Podaj liczbę dokumentów:"))
 
 # dokumenty
-documents = [input("->").lower().split() for _ in range(n)]
+documents = []
+for _ in range(n):
+    my_str = input("->").lower()  # Zamiana na małe litery
+    for r in replacements:
+        my_str = my_str.replace(r, ' ')  # Zamiana znaków na spacje
+    words = my_str.split()  # Podział na słowa
+    documents.append(words)
 
 # liczba zapytań
 m = int(input("Liczba zapytań:"))
 
 # zapytania
-queries = [input("->").strip().lower() for _ in range(m)]
+queries = []
+for _ in range(m):
+    query = input("->").strip().lower()
+    for r in replacements:
+        query = query.replace(r, ' ')  # Zamiana znaków na spacje
+    queries.append(query)
 
 # przetwarzanie zapytań
 for query in queries:
@@ -34,4 +40,3 @@ for query in queries:
         print(" ".join(str(i[0]) for i in results))
     else:
         print()
-
