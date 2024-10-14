@@ -1,3 +1,4 @@
+install_requirements
 from collections import defaultdict
 import re
 
